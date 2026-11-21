@@ -1,0 +1,76 @@
+{
+  "name": "agent-meter-kernel",
+  "version": "0.1.3",
+  "description": "Budget enforcement and usage metering kernel for AI agents. Reserve before you spend, settle at real cost, audit every decision. Zero runtime dependencies.",
+  "keywords": [
+    "ai",
+    "agent",
+    "llm",
+    "budget",
+    "cost",
+    "metering",
+    "token",
+    "guardrail",
+    "finops",
+    "approval"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "pianam",
+    "url": "https://pianam.cn"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./store/memory": {
+      "types": "./dist/store/memory.d.ts",
+      "import": "./dist/store/memory.js"
+    },
+    "./store/jsonl": {
+      "types": "./dist/store/jsonl.d.ts",
+      "import": "./dist/store/jsonl.js"
+    },
+    "./store/http": {
+      "types": "./dist/store/http.d.ts",
+      "import": "./dist/store/http.js"
+    },
+    "./package.json": "./package.json",
+    "./adapters/express": {
+      "types": "./dist/adapters/express.d.ts",
+      "import": "./dist/adapters/express.js"
+    }
+  },
+  "bin": {
+    "agent-meter": "./dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --test test/*.test.js",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  },
+  "homepage": "https://pianam.cn",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/boy-373/agent-meter"
+  },
+  "bugs": {
+    "url": "https://github.com/boy-373/agent-meter/issues"
+  }
+}
