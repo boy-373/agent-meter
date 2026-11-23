@@ -1,12 +1,21 @@
-# agent-meter-kernel
+# @boy-373/agent-meter
 
-**A budget enforcement kernel for AI agents.** Not another token counter — a thing that
+**LLM budget and token cost control for AI agents.** Not another token counter — a thing that
 decides *whether the next call is allowed to happen*, and leaves an audit trail when it isn't.
+
+Sits in front of **any** LLM API — OpenAI, Claude, Gemini, Qwen, DeepSeek, Doubao, GLM, Kimi,
+MiniMax, or your own endpoint. It doesn't wrap your SDK; it stands before the call.
+
+[![CI](https://github.com/boy-373/agent-meter/actions/workflows/ci.yml/badge.svg)](https://github.com/boy-373/agent-meter/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/@boy-373/agent-meter.svg)](https://www.npmjs.com/package/@boy-373/agent-meter)
+[![npm downloads](https://img.shields.io/npm/dm/@boy-373/agent-meter.svg)](https://www.npmjs.com/package/@boy-373/agent-meter)
+[![license](https://img.shields.io/npm/l/@boy-373/agent-meter.svg)](./LICENSE)
 
 Zero runtime dependencies. TypeScript types included. Node 18+.
 
 ```bash
-npm i agent-meter-kernel
+npm i @boy-373/agent-meter
+npx @boy-373/agent-meter models   # 44 built-in prices, no config, no API key
 ```
 
 ---
@@ -21,7 +30,7 @@ Everyone can count tokens. The hard part is the moment before the call:
 - Finance asks "who spent this ¥3,000 and on what" and the answer lives in a log file
   nobody can replay.
 
-`agent-meter-kernel` is the small, boring, correct piece that sits in front of the model call:
+`@boy-373/agent-meter` is the small, boring, correct piece that sits in front of the model call:
 
 ```
 check ──▶ reserve ──▶ call the model ──▶ settle
@@ -34,7 +43,7 @@ check ──▶ reserve ──▶ call the model ──▶ settle
 ## Thirty seconds
 
 ```ts
-import { Meter, JsonlStore, BUILTIN_PRICES, toMicroCny } from 'agent-meter-kernel';
+import { Meter, JsonlStore, BUILTIN_PRICES, toMicroCny } from '@boy-373/agent-meter';
 
 const meter = new Meter({
   store: new JsonlStore({ path: './usage.jsonl' }),
@@ -113,7 +122,7 @@ the budget refuses the hold.**
 `extractUsage` is exported on its own too, for when you already have the response:
 
 ```ts
-import { extractUsage } from 'agent-meter-kernel';
+import { extractUsage } from '@boy-373/agent-meter';
 
 extractUsage(openaiResponse);   // { inputTokens, outputTokens, cacheReadTokens }
 extractUsage(anthropicResponse);
@@ -145,7 +154,7 @@ fromMicroCny(10000n)  // '0.01'
 ### 2. Reserve, then settle
 
 A count-only budget check is racy: ten parallel tasks read "¥0.90 of ¥1.00 used", all
-conclude they fit, and together overspend. `agent-meter-kernel` holds an estimate under a mutex
+conclude they fit, and together overspend. `@boy-373/agent-meter` holds an estimate under a mutex
 before the call, so concurrent fan-out sees `used + held` and cannot collectively cross
 the line.
 
@@ -217,7 +226,7 @@ Every tripped limit is reported in `decision.triggered`.
 so replaying the same event never double-counts.
 
 ```ts
-import { JsonlStore } from 'agent-meter-kernel/store/jsonl';
+import { JsonlStore } from '@boy-373/agent-meter/store/jsonl';
 ```
 
 ---
@@ -251,10 +260,10 @@ overriding the entry.
 ## CLI
 
 ```bash
-agent-meter models                        # list the built-in price table
-agent-meter price qwen3.7-plus -i 1200 -o 480
-agent-meter used --principal user_42 --scope daily --store ./usage.jsonl
-agent-meter summary --store ./usage.jsonl
+@boy-373/agent-meter models                        # list the built-in price table
+@boy-373/agent-meter price qwen3.7-plus -i 1200 -o 480
+@boy-373/agent-meter used --principal user_42 --scope daily --store ./usage.jsonl
+@boy-373/agent-meter summary --store ./usage.jsonl
 ```
 
 ---
@@ -283,7 +292,7 @@ Deliberate non-goals, so the kernel stays small:
 | M4 — approval workflow | decision layer done, no UI |
 | M7 — capability gateway (payments, ICP) | deliberately not started |
 
-The Express adapter ships (`agent-meter-kernel/adapters/express`), but it is deliberately
+The Express adapter ships (`@boy-373/agent-meter/adapters/express`), but it is deliberately
 thin: no auth, no price lookup, no notion of a "credit". Wire your own principal resolution
 and policy lookup into it.
 

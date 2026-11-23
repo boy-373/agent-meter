@@ -4,7 +4,7 @@ Four files, no build step, no framework. Run them straight from the repo after
 `npm install && npm run build`, or from any project that has the package:
 
 ```bash
-npm i agent-meter-kernel
+npm i @boy-373/agent-meter
 ```
 
 | File | What it shows | Run |

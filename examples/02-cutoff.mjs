@@ -12,7 +12,7 @@ import {
   fromMicroCny,
   BudgetDeniedError,
   ApprovalRequiredError,
-} from 'agent-meter-kernel';
+} from '@boy-373/agent-meter';
 
 const meter = new Meter({ store: new MemoryStore(), prices: BUILTIN_PRICES });
 

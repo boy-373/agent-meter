@@ -4,3 +4,6 @@ dist/
 data/*.jsonl
 data/*.db
 .DS_Store
+
+# local backups
+*.bak_*

@@ -11,7 +11,7 @@ import {
   BUILTIN_PRICES,
   toMicroCny,
   fromMicroCny,
-} from 'agent-meter-kernel';
+} from '@boy-373/agent-meter';
 
 const meter = new Meter({
   store: new MemoryStore(),   // swap for JsonlStore / HttpStore in production

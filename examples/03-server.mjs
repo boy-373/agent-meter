@@ -14,8 +14,8 @@ import {
   BUILTIN_PRICES,
   toMicroCny,
   fromMicroCny,
-} from 'agent-meter-kernel';
-import { handleReserve } from 'agent-meter-kernel/adapters/express';
+} from '@boy-373/agent-meter';
+import { handleReserve } from '@boy-373/agent-meter/adapters/express';
 
 const PORT = Number(process.env.PORT ?? 8787);
 const ESTIMATE = toMicroCny('0.01');   // what one /run is expected to cost
